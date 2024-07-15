@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-carddeckapp-dev-7c58e-authRole",
+      "UnauthRoleArn": "arn:aws:iam::533267062945:role/amplify-carddeckapp-dev-7c58e-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::533267062945:role/amplify-carddeckapp-dev-7c58e-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-carddeckapp-dev-7c58e-deployment",
+      "UnauthRoleName": "amplify-carddeckapp-dev-7c58e-unauthRole",
+      "StackName": "amplify-carddeckapp-dev-7c58e",
+      "StackId": "arn:aws:cloudformation:us-east-2:533267062945:stack/amplify-carddeckapp-dev-7c58e/799c24a0-42d8-11ef-bb2e-0ac74981c183",
+      "AmplifyAppId": "dy22rs3921obn"
+    },
+    "categories": {
+      "hosting": {
+        "S3AndCloudFront": {}
+      }
+    }
+  }
+}
