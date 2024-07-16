@@ -22,9 +22,10 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  font-weight: 100;
 }
 
-.App-link {
+.App-text {
   color: #61dafb;
 }
 
