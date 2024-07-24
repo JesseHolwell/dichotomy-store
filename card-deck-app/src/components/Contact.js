@@ -20,7 +20,16 @@ function Contact() {
     e.preventDefault();
 
     emailjs
-      .sendForm("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", e.target, "YOUR_USER_ID")
+      .send(
+        "service_ynfc32s",
+        "template_sx4gpsm",
+        {
+          user_name: formData.name,
+          user_email: formData.email,
+          message: formData.message,
+        },
+        process.env.REACT_APP_EMAILJS_PUBLICKEY
+      )
       .then(
         (result) => {
           console.log(result.text);
