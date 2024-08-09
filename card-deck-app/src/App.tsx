@@ -6,10 +6,11 @@ import Contact from "./components/Contact";
 import Navbar from "./components/Navbar";
 import { ChakraProvider } from "@chakra-ui/react";
 import Footer from "./components/Footer";
+import theme from "./theme";
 
 function App() {
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <Router>
         <Navbar></Navbar>
         <Routes>
