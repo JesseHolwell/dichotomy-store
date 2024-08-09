@@ -41,8 +41,8 @@ https://drive.google.com/drive/folders/1-FFfVOPNxCgVNSozsdxuNu9sSCtbVY-j
 Email service - EmailJS
 https://dashboard.emailjs.com/admin
 
-Payment service - Square
-https://squareup.com/
+Payment service - Stripe
+https://stripe.com/
 
 Credential manager - Bitwarden
 https://vault.bitwarden.com/
