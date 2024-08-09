@@ -1,11 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./Home.css";
+import Hero from "./Hero";
+import ProductDetails from "./ProductDetails";
 
 function Home() {
   return (
     <div>
-      <h1>Dichotomy cards</h1>
+      <Hero></Hero>
+      <ProductDetails></ProductDetails>
+      {/* <h1>Dichotomy cards</h1>
       <p>
         Discover a game that challenges your thinking and sparks meaningful
         conversations. Dichotomy is a unique card game where players delve into
@@ -28,11 +32,11 @@ function Home() {
         Buy Dichotomy 1 deck of 76 unique cards Packaged in tuck box Guide sheet
         included
       </div>
-      <Link to="/buy">Buy now</Link>
-      <div>Insta logo</div>
+      <Link to="/buy">Buy now</Link> */}
+      {/* <div>Insta logo</div>
       <a href="https://www.instagram.com/dichotomycards/" target="_blank">
         @dichotomycards
-      </a>
+      </a> */}
     </div>
   );
 }
