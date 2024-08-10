@@ -19,7 +19,7 @@ import CardRear from "../assets/sample-card-rear.jpg";
 
 export default function CallToActionWithVideo() {
   return (
-    <Container maxW={"7xl"} overflow={"hidden"}>
+    <Container maxW={"7xl"}>
       <Stack
         align={"center"}
         spacing={{ base: 8, md: 10 }}

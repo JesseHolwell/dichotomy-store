@@ -21,6 +21,11 @@ import {
 import { MdLocalShipping } from "react-icons/md";
 import CardFront from "../assets/sample-card-front.jpg";
 import { isFeatureEnabled } from "../util/featureToggle";
+import CardDeck from "./CardDeck";
+import HandwrittenLabel from "./AnnotationArrow";
+import CallToActionWithAnnotation from "./AnnotationArrow";
+import AnnotationArrow from "./AnnotationArrow";
+import InteractiveDeck from "./InteractiveDeck";
 
 export default function Simple() {
   let buttonBg = useColorModeValue("gray.900", "gray.50");
@@ -34,7 +39,7 @@ export default function Simple() {
         py={{ base: 18, md: 24 }}
       >
         <Flex>
-          <Image
+          {/* <Image
             // rounded={"md"}
             rounded={"2xl"}
             alt={"product image"}
@@ -46,7 +51,10 @@ export default function Simple() {
             align={"center"}
             w={"100%"}
             h={{ base: "100%", sm: "400px", lg: "500px" }}
-          />
+          /> */}
+
+          {/* <CardDeck></CardDeck> */}
+          <InteractiveDeck></InteractiveDeck>
         </Flex>
         <Stack spacing={{ base: 6, md: 10 }}>
           <Box as={"header"}>
@@ -62,7 +70,7 @@ export default function Simple() {
               fontWeight={300}
               fontSize={"2xl"}
             >
-              $35.00 USD
+              Coming Soon!
             </Text>
           </Box>
 
@@ -81,7 +89,7 @@ export default function Simple() {
                 fontSize={"2xl"}
                 fontWeight={"300"}
               >
-                Some text here
+                Algunas palabras
               </Text>
               <Text fontSize={"lg"}>
                 Dichotomy is a thought-provoking card game designed to stimulate
