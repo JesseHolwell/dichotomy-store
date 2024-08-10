@@ -12,11 +12,11 @@ function App() {
   return (
     <ChakraProvider theme={theme}>
       <Router>
-        <Navbar></Navbar>
+        {/* <Navbar></Navbar> */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/buy" element={<Buy />} />
-          <Route path="/contact" element={<Contact />} />
+          {/* <Route path="/contact" element={<Contact />} /> */}
         </Routes>
         <Footer></Footer>
       </Router>

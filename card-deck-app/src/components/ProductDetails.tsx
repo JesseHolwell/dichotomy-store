@@ -20,8 +20,12 @@ import {
 } from "@chakra-ui/react";
 import { MdLocalShipping } from "react-icons/md";
 import CardFront from "../assets/sample-card-front.jpg";
+import { isFeatureEnabled } from "../util/featureToggle";
 
 export default function Simple() {
+  let buttonBg = useColorModeValue("gray.900", "gray.50");
+  let buttonColor = useColorModeValue("white", "gray.900");
+
   return (
     <Container maxW={"7xl"}>
       <SimpleGrid
@@ -176,27 +180,35 @@ export default function Simple() {
             </Box> */}
           </Stack>
 
-          <Button
-            rounded={"none"}
-            w={"full"}
-            mt={8}
-            size={"lg"}
-            py={"7"}
-            bg={useColorModeValue("gray.900", "gray.50")}
-            color={useColorModeValue("white", "gray.900")}
-            textTransform={"uppercase"}
-            _hover={{
-              transform: "translateY(2px)",
-              boxShadow: "lg",
-            }}
-          >
-            Add to cart
-          </Button>
+          {isFeatureEnabled("canPurchase") && (
+            <>
+              <Button
+                rounded={"none"}
+                w={"full"}
+                mt={8}
+                size={"lg"}
+                py={"7"}
+                bg={buttonBg}
+                color={buttonColor}
+                textTransform={"uppercase"}
+                _hover={{
+                  transform: "translateY(2px)",
+                  boxShadow: "lg",
+                }}
+              >
+                Add to cart
+              </Button>
 
-          <Stack direction="row" alignItems="center" justifyContent={"center"}>
-            <MdLocalShipping />
-            <Text>5-7 business days delivery</Text>
-          </Stack>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent={"center"}
+              >
+                <MdLocalShipping />
+                <Text>5-7 business days delivery</Text>
+              </Stack>
+            </>
+          )}
         </Stack>
       </SimpleGrid>
     </Container>

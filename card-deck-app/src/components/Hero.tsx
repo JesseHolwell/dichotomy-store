@@ -19,7 +19,7 @@ import CardRear from "../assets/sample-card-rear.jpg";
 
 export default function CallToActionWithVideo() {
   return (
-    <Container maxW={"7xl"}>
+    <Container maxW={"7xl"} overflow={"hidden"}>
       <Stack
         align={"center"}
         spacing={{ base: 8, md: 10 }}
@@ -74,7 +74,7 @@ export default function CallToActionWithVideo() {
               bg={"orange.400"}
               _hover={{ bg: "orange.500" }}
             >
-              Buy now
+              Sign up to news
             </Button>
             <Button
               rounded={"full"}

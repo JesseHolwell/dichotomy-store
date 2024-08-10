@@ -48,7 +48,7 @@ export default function LargeWithLogoCentered() {
       bg={useColorModeValue("gray.50", "gray.900")}
       color={useColorModeValue("gray.700", "gray.200")}
     >
-      <Container as={Stack} maxW={"6xl"} py={10} align={"center"}>
+      <Container as={Stack} maxW={"6xl"} py={10} mt={10} align={"center"}>
         {/* <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={4}> */}
         {/* <Stack align={"flex-start"}>
             <ListHeader>Product</ListHeader>

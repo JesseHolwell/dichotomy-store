@@ -21,30 +21,29 @@ import {
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
 import logo from "../assets/icon.png";
+import { isFeatureEnabled } from "../util/featureToggle";
 
 interface Props {
   children: React.ReactNode;
 }
 
-// const Links = ["Home", "Buy", "Contact"];
-
 const Links = [
   {
     label: "Home",
     value: "",
+    enabled: true,
   },
   {
     label: "Buy",
     value: "Buy",
+    enabled: isFeatureEnabled("canPurchase"),
   },
   {
     label: "Contact",
     value: "Contact",
+    enabled: true,
   },
 ];
-// {
-
-// }, "Buy", "Contact"];
 
 const NavLink = (props: Props) => {
   const { children } = props;
@@ -97,19 +96,27 @@ export default function Simple() {
               spacing={4}
               display={{ base: "none", md: "flex" }}
             >
-              {Links.map((link) => (
+              {Links.map((link) =>
                 // <NavLink key={link}>{link}</NavLink>
-                <Link to={"/" + link.value}>{link.label}</Link>
-              ))}
+                link.enabled ? (
+                  <Link to={"/" + link.value}>{link.label}</Link>
+                ) : (
+                  ""
+                )
+              )}
             </HStack>
           </HStack>
         </Flex>
         {isOpen ? (
           <Box pb={4} display={{ md: "none" }}>
             <Stack as={"nav"} spacing={4}>
-              {Links.map((link) => (
-                <NavLink key={link.value}>{link.label}</NavLink>
-              ))}
+              {Links.map((link) =>
+                link.enabled ? (
+                  <NavLink key={link.value}>{link.label}</NavLink>
+                ) : (
+                  ""
+                )
+              )}
             </Stack>
           </Box>
         ) : null}

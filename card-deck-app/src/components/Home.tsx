@@ -3,12 +3,19 @@ import { Link } from "react-router-dom";
 import "./Home.css";
 import Hero from "./Hero";
 import ProductDetails from "./ProductDetails";
+import Contact from "./Contact";
+import { isFeatureEnabled } from "../util/featureToggle";
+import MailingList from "./MailingList";
 
 function Home() {
   return (
     <div>
       <Hero></Hero>
       <ProductDetails></ProductDetails>
+
+      {isFeatureEnabled("canPurchase") && <Contact></Contact>}
+      {isFeatureEnabled("canJoinMailingList") && <MailingList></MailingList>}
+
       {/* <h1>Dichotomy cards</h1>
       <p>
         Discover a game that challenges your thinking and sparks meaningful
