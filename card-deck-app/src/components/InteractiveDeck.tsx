@@ -17,7 +17,7 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import CardRear from "../assets/sample-card-rear.jpg";
-import CardFront from "../assets/sample-card-front.jpg";
+import CardFront from "../assets/sample-card-front-blank.jpg";
 import AnnotationArrow from "./AnnotationArrow";
 import { useState } from "react";
 
@@ -67,49 +67,36 @@ const CardComponent: React.FC = () => {
           // rounded={"md"}
           rounded={"2xl"}
           alt={"product image"}
-          src={
-            CardFront
-            //   "https://images.unsplash.com/photo-1596516109370-29001ec8ec36?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyODE1MDl8MHwxfGFsbHx8fHx8fHx8fDE2Mzg5MzY2MzE&ixlib=rb-1.2.1&q=80&w=1080"
-          }
+          src={CardFront}
           fit={"contain"}
           align={"center"}
           w={"100%"}
-          //   h={{ base: "100%", sm: "400px", lg: "500px" }}
         />
         <HStack
           position="absolute"
           top={"50%"}
           left="50%"
           transform={"translate(-50%, -50%)"}
-          //   alignContent={"center"}
-          //   justifyContent={"space-evenly"}
           textShadow="#000 0 0 4px;"
           textTransform="uppercase"
           color="#EEE"
           fontWeight="bold"
           fontSize={"1.7em"}
           width="100%"
-          // display="flex"
-          // justifyContent={"space-between"}
-          // px="10%"
-          // justifyContent={"space-evenly"}
         >
-          {/* <Heading size="md" textAlign="center"> */}
           <Text as="span" display="block" w="full" textAlign={"center"}>
             {currentPair.word1}
           </Text>
           <Text as="span" display="block" w="full" textAlign={"center"}>
             {currentPair.word2}
           </Text>
-          {/* </Heading> */}
         </HStack>
       </Box>
-      <Box ml="50%">
+      <Box ml="70%">
         <AnnotationArrow></AnnotationArrow>
       </Box>
     </Box>
   );
 };
 
-// export default InteractiveDeck;
 export default CardComponent;

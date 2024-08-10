@@ -69,7 +69,7 @@ export default function Simple() {
               fontWeight={300}
               fontSize={"2xl"}
             >
-              Coming Soon!
+              Available for purchase soon!
             </Text>
           </Box>
 
