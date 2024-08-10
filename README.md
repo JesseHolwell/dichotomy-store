@@ -59,3 +59,6 @@ https://jesseholwell.github.io/dichotomy
 
 QR code:
 https://app.qr-code-generator.com/manage/?aftercreate=1&count=1
+
+Mailing list:
+https://www.brevo.com/
