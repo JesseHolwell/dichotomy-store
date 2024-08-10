@@ -1,1 +1,6 @@
 /* ... */
+
+/* Remove blue highlight when tapping on mobile */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
