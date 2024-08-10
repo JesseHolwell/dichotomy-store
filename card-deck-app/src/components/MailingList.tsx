@@ -49,7 +49,7 @@ const MailingList: React.FC = () => {
           attributes: {
             FIRSTNAME: data.name,
           },
-          listIds: [3],
+          listIds: [process.env.REACT_APP_BREVO_LIST_ID_STAGING],
           updateEnabled: false,
         },
         {
@@ -61,8 +61,11 @@ const MailingList: React.FC = () => {
       );
       setSubmitStatus("Successfully subscribed! Thank you.");
       reset();
-    } catch (error) {
-      setSubmitStatus("There was an error subscribing. Please try again.");
+    } catch (error: any) {
+      // console.log(error);
+      setSubmitStatus(
+        "There was an error subscribing.\n" + error.response.data.message
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -83,7 +86,10 @@ const MailingList: React.FC = () => {
       centerContent
       overflow="hidden"
     >
-      <Flex minW={{ sm: "50vw", xs: "100vw" }}>
+      <Flex
+        minW={{ sm: "50vw", xs: "100vw" }}
+        maxW={{ sm: "50vw", xs: "100vw" }}
+      >
         <Box
           bg={useColorModeValue("gray.100", "gray.900")}
           borderRadius="lg"
