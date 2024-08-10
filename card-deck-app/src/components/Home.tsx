@@ -6,11 +6,17 @@ import ProductDetails from "./ProductDetails";
 import Contact from "./Contact";
 import { isFeatureEnabled } from "../util/featureToggle";
 import MailingList from "./MailingList";
+import { Box } from "@chakra-ui/react";
 
 function Home() {
   return (
     <div>
-      <Hero></Hero>
+      <Box
+        // overflow={{ xs: "hidden" }}
+        overflow="hidden"
+      >
+        <Hero></Hero>
+      </Box>
       <ProductDetails></ProductDetails>
 
       {isFeatureEnabled("canPurchase") && <Contact></Contact>}

@@ -109,11 +109,13 @@ export default function CallToActionWithVideo() {
           w={"full"}
         >
           <Blob
-            w={"150%"}
+            id="blob"
+            // w={"150%"}
+
             h={"150%"}
             position={"absolute"}
             top={"-20%"}
-            left={0}
+            left={125}
             zIndex={-1}
             color={useColorModeValue("orange.50", "orange.400")}
           />
