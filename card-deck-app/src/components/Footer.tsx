@@ -15,6 +15,7 @@ import {
 import { ReactNode } from "react";
 import logo from "../assets/icon.png";
 import { SocialIcon } from "react-social-icons";
+// import { Mdinsta } from "react-icons/md";
 // import { SocialIcon } from "react-social-icons/component";
 import "react-social-icons/instagram";
 
@@ -119,12 +120,17 @@ export default function LargeWithLogoCentered() {
 
           <Flex
             as="a"
-            href={"#"}
+            href={"https://www.instagram.com/dichotomycards/"}
+            target="_blank"
             alignItems={"center"}
             justifyContent={"space-between"}
           >
             <HStack spacing={8} alignItems={"center"} h={"100%"} gap={"2"}>
-              <SocialIcon url="www.instagram.com" bgColor="333333" />
+              <SocialIcon
+                // url=""
+                network="instagram"
+                bgColor="333333"
+              />
               <Text>@dichotomycards</Text>
             </HStack>
           </Flex>

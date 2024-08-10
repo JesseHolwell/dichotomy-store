@@ -116,7 +116,13 @@ import { BsGithub, BsDiscord, BsPerson } from "react-icons/bs";
 
 export default function MailingList() {
   return (
-    <Container maxW="full" mt={0} centerContent overflow="hidden">
+    <Container
+      id="contact-section"
+      maxW="full"
+      mt={0}
+      centerContent
+      overflow="hidden"
+    >
       <Flex minW={{ sm: "50vw", xs: "100vw" }}>
         <Box
           bg={useColorModeValue("gray.100", "gray.900")}

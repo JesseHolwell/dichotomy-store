@@ -31,7 +31,7 @@ export default function Simple() {
   let buttonColor = useColorModeValue("white", "gray.900");
 
   return (
-    <Container maxW={"7xl"}>
+    <Container id="product-details-section" maxW={"7xl"}>
       <SimpleGrid
         columns={{ base: 1, lg: 2 }}
         spacing={{ base: 8, md: 10 }}
