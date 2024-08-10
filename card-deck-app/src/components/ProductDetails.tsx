@@ -21,7 +21,6 @@ import {
 import { MdLocalShipping } from "react-icons/md";
 import CardFront from "../assets/sample-card-front.jpg";
 import { isFeatureEnabled } from "../util/featureToggle";
-import CardDeck from "./CardDeck";
 import HandwrittenLabel from "./AnnotationArrow";
 import CallToActionWithAnnotation from "./AnnotationArrow";
 import AnnotationArrow from "./AnnotationArrow";
