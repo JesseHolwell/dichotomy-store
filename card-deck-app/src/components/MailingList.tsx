@@ -161,11 +161,24 @@ export default function MailingList() {
                       </InputGroup>
                     </FormControl>
                     <FormControl id="name" float="right">
-                      <Button
+                      {/* <Button
                         variant="solid"
                         bg="#ff7700"
                         fontWeight={"normal"}
                         colorScheme="orange"
+                        _hover={{ bg: "orange.500" }}
+                      >
+                        Sign up
+                      </Button> */}
+
+                      <Button
+                        rounded={"full"}
+                        size={"md"}
+                        fontWeight={"normal"}
+                        px={6}
+                        mt={6}
+                        colorScheme={"orange"}
+                        bg={"orange.400"}
                         _hover={{ bg: "orange.500" }}
                       >
                         Sign up
