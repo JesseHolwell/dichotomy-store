@@ -1,120 +1,80 @@
-// import React, { useState } from "react";
-// import emailjs from "emailjs-com";
-
-// function Contact() {
-//   const [formData, setFormData] = useState({
-//     name: "",
-//     email: "",
-//     message: "",
-//   });
-
-//   const handleChange = (e: any) => {
-//     const { name, value } = e.target;
-//     setFormData({
-//       ...formData,
-//       [name]: value,
-//     });
-//   };
-
-//   const handleSubmit = (e: any) => {
-//     e.preventDefault();
-
-//     emailjs
-//       .send(
-//         "service_ynfc32s",
-//         "template_sx4gpsm",
-//         {
-//           user_name: formData.name,
-//           user_email: formData.email,
-//           message: formData.message,
-//         },
-//         process.env.REACT_APP_EMAILJS_PUBLICKEY
-//       )
-//       .then(
-//         (result) => {
-//           console.log(result.text);
-//           alert("Message sent successfully");
-//         },
-//         (error) => {
-//           console.log(error.text);
-//           alert("Failed to send message");
-//         }
-//       );
-
-//     setFormData({ name: "", email: "", message: "" });
-//   };
-
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <div>
-//         <label>Name</label>
-//         <input
-//           type="text"
-//           name="name"
-//           value={formData.name}
-//           onChange={handleChange}
-//           required
-//         />
-//       </div>
-//       <div>
-//         <label>Email</label>
-//         <input
-//           type="email"
-//           name="email"
-//           value={formData.email}
-//           onChange={handleChange}
-//           required
-//         />
-//       </div>
-//       <div>
-//         <label>Message</label>
-//         <textarea
-//           name="message"
-//           value={formData.message}
-//           onChange={handleChange}
-//           required
-//         />
-//       </div>
-//       <button type="submit">Send</button>
-//     </form>
-//   );
-// }
-
-// export default Contact;
-
-"use client";
-
+import React, { useState } from "react";
 import {
   Container,
   Flex,
   Box,
   Heading,
   Text,
-  IconButton,
   Button,
   VStack,
-  HStack,
-  Wrap,
-  WrapItem,
   FormControl,
   FormLabel,
   Input,
   InputGroup,
   InputLeftElement,
-  Textarea,
   useColorModeValue,
   Stack,
 } from "@chakra-ui/react";
-import {
-  MdPhone,
-  MdEmail,
-  MdLocationOn,
-  MdFacebook,
-  MdOutlineEmail,
-} from "react-icons/md";
-import { BsGithub, BsDiscord, BsPerson } from "react-icons/bs";
+import { BsPerson } from "react-icons/bs";
+import { MdOutlineEmail } from "react-icons/md";
+import { useForm } from "react-hook-form";
+import axios from "axios";
 
-export default function MailingList() {
+type FormData = {
+  email: string;
+  name: string;
+};
+
+const MailingList: React.FC = () => {
+  const [submitStatus, setSubmitStatus] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    watch,
+  } = useForm<FormData>();
+
+  const emailValue = watch("email");
+
+  const onSubmit = async (data: FormData) => {
+    setIsSubmitting(true);
+    try {
+      const response = await axios.post(
+        "https://api.sendinblue.com/v3/contacts",
+        {
+          email: data.email,
+          attributes: {
+            FIRSTNAME: data.name,
+          },
+          listIds: [3],
+          updateEnabled: false,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "api-key": process.env.REACT_APP_BREVO_API_KEY,
+          },
+        }
+      );
+      setSubmitStatus("Successfully subscribed! Thank you.");
+      reset();
+    } catch (error) {
+      setSubmitStatus("There was an error subscribing. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // // Reset submit status when email changes
+  // React.useEffect(() => {
+  //   if (submitStatus && emailValue) {
+  //     setSubmitStatus(null);
+  //   }
+  // }, [emailValue, submitStatus]);
+
   return (
     <Container
       id="contact-section"
@@ -141,50 +101,74 @@ export default function MailingList() {
               </Box>
               <Box bg="#2c313d" borderRadius="lg">
                 <Box m={8} color="white">
-                  <VStack spacing={5}>
-                    <FormControl id="name">
-                      <FormLabel>Your Name</FormLabel>
-                      <InputGroup borderColor="gray.900">
-                        <InputLeftElement pointerEvents="none">
-                          <BsPerson color="gray.800" />
-                        </InputLeftElement>
-                        <Input type="text" size="md" />
-                      </InputGroup>
-                    </FormControl>
-                    <FormControl id="name">
-                      <FormLabel>Email</FormLabel>
-                      <InputGroup borderColor="gray.900">
-                        <InputLeftElement pointerEvents="none">
-                          <MdOutlineEmail color="gray.800" />
-                        </InputLeftElement>
-                        <Input type="text" size="md" />
-                      </InputGroup>
-                    </FormControl>
-                    <FormControl id="name" float="right">
-                      {/* <Button
-                        variant="solid"
-                        bg="#ff7700"
-                        fontWeight={"normal"}
-                        colorScheme="orange"
-                        _hover={{ bg: "orange.500" }}
-                      >
-                        Sign up
-                      </Button> */}
-
-                      <Button
-                        rounded={"full"}
-                        size={"md"}
-                        fontWeight={"normal"}
-                        px={6}
-                        mt={6}
-                        colorScheme={"orange"}
-                        bg={"orange.400"}
-                        _hover={{ bg: "orange.500" }}
-                      >
-                        Sign up
-                      </Button>
-                    </FormControl>
-                  </VStack>
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    <VStack spacing={5}>
+                      <FormControl id="name" isInvalid={!!errors.name}>
+                        <FormLabel>Your Name</FormLabel>
+                        <InputGroup borderColor="gray.900">
+                          <InputLeftElement pointerEvents="none">
+                            <BsPerson color="gray.800" />
+                          </InputLeftElement>
+                          <Input
+                            type="text"
+                            size="md"
+                            {...register("name", {
+                              required: "Name is required",
+                            })}
+                          />
+                        </InputGroup>
+                        {errors.name && (
+                          <Text color="red.500">{errors.name.message}</Text>
+                        )}
+                      </FormControl>
+                      <FormControl id="email" isInvalid={!!errors.email}>
+                        <FormLabel>Email</FormLabel>
+                        <InputGroup borderColor="gray.900">
+                          <InputLeftElement pointerEvents="none">
+                            <MdOutlineEmail color="gray.800" />
+                          </InputLeftElement>
+                          <Input
+                            type="email"
+                            size="md"
+                            {...register("email", {
+                              required: "Email is required",
+                            })}
+                          />
+                        </InputGroup>
+                        {errors.email && (
+                          <Text color="red.500">{errors.email.message}</Text>
+                        )}
+                      </FormControl>
+                      <FormControl id="submit">
+                        <Button
+                          rounded={"full"}
+                          size={"md"}
+                          fontWeight={"normal"}
+                          px={6}
+                          mt={6}
+                          colorScheme={"orange"}
+                          bg={"orange.400"}
+                          _hover={{ bg: "orange.500" }}
+                          type="submit"
+                          isDisabled={isSubmitting}
+                        >
+                          {isSubmitting ? "Submitting..." : "Sign up"}
+                        </Button>
+                        {submitStatus && (
+                          <Text
+                            mt={3}
+                            color={
+                              submitStatus.startsWith("Successfully")
+                                ? "green.500"
+                                : "red.500"
+                            }
+                          >
+                            {submitStatus}
+                          </Text>
+                        )}
+                      </FormControl>
+                    </VStack>
+                  </form>
                 </Box>
               </Box>
             </Stack>
@@ -193,4 +177,6 @@ export default function MailingList() {
       </Flex>
     </Container>
   );
-}
+};
+
+export default MailingList;

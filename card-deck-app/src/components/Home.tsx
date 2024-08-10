@@ -7,6 +7,7 @@ import Contact from "./Contact";
 import { isFeatureEnabled } from "../util/featureToggle";
 import MailingList from "./MailingList";
 import { Box } from "@chakra-ui/react";
+import BrevoMailList from "./BrevoMailList";
 
 function Home() {
   return (
@@ -19,8 +20,10 @@ function Home() {
       </Box>
       <ProductDetails></ProductDetails>
 
-      {isFeatureEnabled("canPurchase") && <Contact></Contact>}
+      {/* {isFeatureEnabled("canPurchase") && <Contact></Contact>} */}
       {isFeatureEnabled("canJoinMailingList") && <MailingList></MailingList>}
+
+      {/* <BrevoMailList></BrevoMailList> */}
 
       {/* <h1>Dichotomy cards</h1>
       <p>
