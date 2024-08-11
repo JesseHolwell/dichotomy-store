@@ -22,7 +22,7 @@ export default function CallToActionWithVideo() {
       <Stack
         align={"center"}
         spacing={{ base: 8, md: 10 }}
-        py={{ base: 12, md: 28 }}
+        py={{ base: 12, md: 40 }}
         direction={{ base: "column", md: "row" }}
       >
         <Stack flex={1} spacing={{ base: 5, md: 10 }}>
