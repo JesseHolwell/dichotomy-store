@@ -1,7 +1,7 @@
 "use client";
 
-import { Box, Image, Text, HStack } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { Box, HStack, Image, Text } from "@chakra-ui/react";
+import { useState } from "react";
 import CardFront from "../assets/sample-card-front-blank.jpg";
 import AnnotationArrow from "./AnnotationArrow";
 import "./InteractiveDeck.css";
@@ -14,18 +14,11 @@ interface WordPair {
 const wordPairs: WordPair[] = [
   { word1: "Introvert", word2: "Extrovert" },
   { word1: "Optimist", word2: "Pessimist" },
+  { word1: "Ocean", word2: "River" },
   { word1: "Thinker", word2: "Feeler" },
-  { word1: "Planner", word2: "Spontaneous" },
-  { word1: "Confident", word2: "Shy" },
+  { word1: "Art", word2: "Science" },
 ];
 
-// function getRandomPair(exclude: WordPair | null): WordPair {
-//   let randomIndex;
-//   do {
-//     randomIndex = Math.floor(Math.random() * wordPairs.length);
-//   } while (wordPairs[randomIndex] === exclude);
-//   return wordPairs[randomIndex];
-// }
 const CardComponent: React.FC = () => {
   const [stack, setStack] = useState<WordPair[]>([wordPairs[0], wordPairs[1]]);
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -35,24 +28,15 @@ const CardComponent: React.FC = () => {
     if (!isAnimating) {
       setIsAnimating(true);
 
-      // Calculate the next index
       const nextIndex = (currentIndex + 1) % wordPairs.length;
 
-      // Immediately update the stack so the bottom card is set to the next pair in the list
-      setStack((prevStack) => [
-        prevStack[0], // Keep the current top card
-        wordPairs[nextIndex], // Set the bottom card to the next pair in the list
-      ]);
+      setStack((prevStack) => [prevStack[0], wordPairs[nextIndex]]);
 
-      // After the animation completes, shift the new bottom card to the top
       setTimeout(() => {
-        setStack((prevStack) => [
-          prevStack[1], // Move the bottom card to the top
-          wordPairs[nextIndex], // Keep the next pair in the bottom
-        ]);
+        setStack((prevStack) => [prevStack[1], wordPairs[nextIndex]]);
         setCurrentIndex(nextIndex);
         setIsAnimating(false);
-      }, 500); // Match the duration of the animation
+      }, 500);
     }
   };
 
@@ -70,7 +54,6 @@ const CardComponent: React.FC = () => {
           w={"100%"}
         />
 
-        {/* Render the cards, the top one being the one that animates */}
         {stack.slice(0, 2).map((pair, index) => (
           <Box
             key={index}
@@ -98,14 +81,14 @@ const CardComponent: React.FC = () => {
             />
             <HStack
               position="absolute"
-              top={"50%"}
+              top={"49%"}
               left="50%"
               transform={"translate(-50%, -50%)"}
               textShadow="#000 0 0 4px;"
               textTransform="uppercase"
               color="#EEE"
               fontWeight="bold"
-              fontSize={"1.7em"}
+              fontSize={"2xl"}
               width="100%"
             >
               <Text as="span" display="block" w="full" textAlign={"center"}>
