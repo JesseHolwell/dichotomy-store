@@ -178,7 +178,7 @@ export default function LargeWithLogoCentered() {
           />
         </Flex>
         <Text pt={6} fontSize={"sm"} textAlign={"center"}>
-          © 2024 Something legal something
+          © 2024 Copyright
         </Text>
       </Box>
     </Box>
