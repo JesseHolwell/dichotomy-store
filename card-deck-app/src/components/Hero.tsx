@@ -57,9 +57,8 @@ export default function CallToActionWithVideo() {
             Discover a game that challenges your thinking and sparks meaningful
             conversations. Dichotomy is a unique card game where players delve
             into a world of contrasting ideas, making choices that reveal their
-            deep- est values and perspectives. Perfect for gatherings with
-            friends and family, Dichotomy is more than just a game—it's an
-            experience.
+            deepest values and perspectives. Perfect for gatherings with friends
+            and family, Dichotomy is more than just a game — it's an experience.
           </Text>
           <Stack
             spacing={{ base: 4, sm: 6 }}
