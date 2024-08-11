@@ -13,7 +13,7 @@ import {
 import { ReactNode } from "react";
 import { SocialIcon } from "react-social-icons";
 import "react-social-icons/instagram";
-import logo from "../assets/icon.png";
+import logo from "../assets/icon-transparent.png";
 
 const ListHeader = ({ children }: { children: ReactNode }) => {
   return (
@@ -38,11 +38,11 @@ export default function LargeWithLogoCentered() {
             alignItems={"center"}
             justifyContent={"space-between"}
           >
-            <HStack spacing={8} alignItems={"center"} h={"100%"} gap={"2"}>
+            <HStack spacing={8} alignItems={"center"} h={"100%"} gap={"0"}>
               <SocialIcon
                 // url=""
                 network="instagram"
-                bgColor="333333"
+                bgColor="#171923"
               />
               <Text>@dichotomycards</Text>
             </HStack>
