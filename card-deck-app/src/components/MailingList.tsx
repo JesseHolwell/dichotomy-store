@@ -43,7 +43,6 @@ const MailingList: React.FC = () => {
     setIsSubmitting(true);
     try {
       //debug
-      console.log("Brevo API Key:", process.env.REACT_APP_BREVO_API_KEY);
       const response = await axios.post(
         "https://api.sendinblue.com/v3/contacts",
         {
@@ -51,7 +50,7 @@ const MailingList: React.FC = () => {
           attributes: {
             FIRSTNAME: data.name,
           },
-          listIds: [process.env.REACT_APP_BREVO_LIST_ID_STAGING],
+          listIds: [Number(process.env.REACT_APP_BREVO_LIST_ID_STAGING)],
           updateEnabled: false,
         },
         {
