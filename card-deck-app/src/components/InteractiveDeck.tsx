@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import CardFront from "../assets/sample-card-front-blank.jpg";
 import AnnotationArrow from "./AnnotationArrow";
 import "./InteractiveDeck.css";
+import CardRear from "../assets/sample-card-rear.jpg";
 
 interface WordPair {
   word1: string;
@@ -52,69 +53,91 @@ const CardComponent: React.FC = () => {
         ]);
         setCurrentIndex(nextIndex);
         setIsAnimating(false);
-      }, 500); // Match the duration of the animation
+      }, 1000); // Match the duration of the animation
     }
   };
 
   return (
     <Box w="full">
-      <Box w="full" position="relative">
+      <Box w="full" position="relative" className="flip-card">
         {/* Hack to properly size the card deck based on this image.. TODO: fix */}
         <Image
-          display={"hidden"}
           rounded={"2xl"}
-          alt={"product image"}
+          alt={"hidden image"}
           src={CardFront}
           fit={"contain"}
           align={"center"}
           w={"100%"}
+          visibility={"hidden"}
         />
 
         {/* Render the cards, the top one being the one that animates */}
         {stack.slice(0, 2).map((pair, index) => (
           <Box
-            key={index}
+            className="flip-card-inner"
             onClick={index === 0 ? handleCardClick : undefined}
-            position="absolute"
-            top={0}
-            left={0}
-            width="100%"
-            height="100%"
             cursor={index === 0 ? "pointer" : "default"}
             animation={
               index === 0 && isAnimating
-                ? "removeCard 0.5s ease forwards"
+                ? "removeCard 1s ease forwards"
                 : "none"
             }
             zIndex={index === 0 ? 1 : 0}
+            position="absolute"
+            top="0"
           >
-            <Image
-              rounded={"2xl"}
-              alt={"product image"}
-              src={CardFront}
-              fit={"contain"}
-              align={"center"}
-              w={"100%"}
-            />
-            <HStack
+            <Box
+              key={index}
               position="absolute"
-              top={"50%"}
-              left="50%"
-              transform={"translate(-50%, -50%)"}
-              textShadow="#000 0 0 4px;"
-              textTransform="uppercase"
-              color="#EEE"
-              fontWeight="bold"
-              fontSize={"1.7em"}
+              top={0}
+              left={0}
               width="100%"
+              height="100%"
+              className="flip-card-front"
             >
-              <Text as="span" display="block" w="full" textAlign={"center"}>
-                {pair.word1}
-              </Text>
-              <Text as="span" display="block" w="full" textAlign={"center"}>
-                {pair.word2}
-              </Text>
-            </HStack>
+              <Image
+                rounded={"2xl"}
+                alt={"product image"}
+                src={CardFront}
+                fit={"contain"}
+                align={"center"}
+                w={"100%"}
+              />
+              <HStack
+                position="absolute"
+                top={"50%"}
+                left="50%"
+                transform={"translate(-50%, -50%)"}
+                textShadow="#000 0 0 4px;"
+                textTransform="uppercase"
+                color="#EEE"
+                fontWeight="bold"
+                fontSize={"1.7em"}
+                width="100%"
+              >
+                <Text as="span" display="block" w="full" textAlign={"center"}>
+                  {pair.word1}
+                </Text>
+                <Text as="span" display="block" w="full" textAlign={"center"}>
+                  {pair.word2}
+                </Text>
+              </HStack>
+            </Box>
+            <Box className="flip-card-back">
+              <Image
+                alt={"Hero Image"}
+                fit={"contain"}
+                align={"center"}
+                // w={"100%"}
+                // h={"100%"}
+                rounded={"2xl"}
+                boxShadow={"2xl"}
+                src={
+                  CardRear
+                  // "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=800&q=80"
+                }
+              />
+            </Box>
           </Box>
         ))}
       </Box>
