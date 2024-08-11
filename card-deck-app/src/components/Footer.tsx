@@ -42,7 +42,7 @@ export default function LargeWithLogoCentered() {
               <SocialIcon
                 // url=""
                 network="instagram"
-                bgColor="#171923"
+                bgColor="transparent"
               />
               <Text>@dichotomycards</Text>
             </HStack>
