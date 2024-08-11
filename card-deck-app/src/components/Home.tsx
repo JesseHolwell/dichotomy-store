@@ -11,7 +11,7 @@ import BrevoMailList from "./BrevoMailList";
 
 function Home() {
   return (
-    <div>
+    <Box overflow="hidden">
       <Box
         // overflow={{ xs: "hidden" }}
         overflow="hidden"
@@ -53,7 +53,7 @@ function Home() {
       <a href="https://www.instagram.com/dichotomycards/" target="_blank">
         @dichotomycards
       </a> */}
-    </div>
+    </Box>
   );
 }
 
