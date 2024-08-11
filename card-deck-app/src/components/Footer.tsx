@@ -149,7 +149,7 @@ export default function LargeWithLogoCentered() {
         </Stack>
         {/* </SimpleGrid> */}
       </Container>
-      <Box py={10}>
+      <Box pb={10}>
         <Flex
           align={"center"}
           _before={{
