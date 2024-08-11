@@ -35,7 +35,7 @@ export default function Simple() {
       <SimpleGrid
         columns={{ base: 1, lg: 2 }}
         spacing={{ base: 8, md: 10 }}
-        py={{ base: 18, md: 24 }}
+        py={{ base: 18, md: 24, sm: 24 }}
       >
         <Flex>
           {/* <Image
@@ -116,11 +116,11 @@ export default function Simple() {
                   <ListItem>Packaged in tuck box</ListItem>{" "}
                   <ListItem>Guide sheet included</ListItem>
                 </List>
-                <List spacing={2}>
+                {/* <List spacing={2}>
                   <ListItem>...</ListItem>
                   <ListItem>...</ListItem>
                   <ListItem>...</ListItem>
-                </List>
+                </List> */}
               </SimpleGrid>
             </Box>
             {/* <Box>
