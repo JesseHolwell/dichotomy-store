@@ -3,7 +3,7 @@
 import { Box, HStack, Image, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import CardFront from "../assets/sample-card-front-blank.jpg";
-import AnnotationArrow from "./AnnotationArrow";
+import AnnotationArrow from "../AnnotationArrow/AnnotationArrow";
 import "./InteractiveDeck.css";
 
 interface WordPair {
@@ -43,7 +43,7 @@ const CardComponent: React.FC = () => {
   return (
     <Box w="full">
       <Box w="full" position="relative">
-        {/* Hack to properly size the card deck based on this image.. TODO: fix */}
+        {/* HACK: Invisible image to properly size the card deck.. TODO: fix */}
         <Image
           display={"hidden"}
           rounded={"2xl"}

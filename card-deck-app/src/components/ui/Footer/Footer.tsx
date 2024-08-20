@@ -10,18 +10,9 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { ReactNode } from "react";
 import { SocialIcon } from "react-social-icons";
 import "react-social-icons/instagram";
 import logo from "../assets/icon-transparent.png";
-
-const ListHeader = ({ children }: { children: ReactNode }) => {
-  return (
-    <Text fontWeight={"500"} fontSize={"lg"} mb={2}>
-      {children}
-    </Text>
-  );
-};
 
 export default function LargeWithLogoCentered() {
   return (

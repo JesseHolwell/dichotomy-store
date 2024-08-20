@@ -1,13 +1,11 @@
 import {
   Box,
-  Heading,
   Container,
-  Text,
-  Button,
-  Stack,
-  Icon,
-  useColorModeValue,
   createIcon,
+  Icon,
+  Stack,
+  Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
 
 export default function AnnotationArrow() {
