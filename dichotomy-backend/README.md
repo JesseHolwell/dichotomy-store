@@ -1,18 +1,15 @@
 # Nodejs Express base API
 
-This is a boilerplate application for building REST APIs in Node.js using ES6, Express and PostgreSQL.
+The backend for the dichotomy card game store using REST APIs in Node.js using ES6, Express and PostgreSQL.
 
 ## Getting Started
 
 ### Installation
 
-1. Clone the repository with `https://github.com/japananh/node-express-postgres-boilerplate.git`
-2. Install the dependencies with `yarn install` (click here if [you don't have Yarn installed](https://yarnpkg.com/getting-started/install)
-3. Setup the database on `src/config/postgres.js` and config information on `env.example`
+1. `npm i`
+2. Setup the database on `src/config/postgres.js` and config information on `env.example`
 
 ### Scripts
-
-This boilerplate comes with a collection of npm scripts to make your life easier, you'll run them with `npm run <script name>` or `yarn <script name>`:
 
 -   `dev`: Run the application in development mode
 -   `lint`: Run ESLint
@@ -217,20 +214,3 @@ It is up to the server (or process manager) to actually read them from the conso
 This app uses pm2 in production mode, which is already configured to store the logs in log files.
 
 Note: API request information (request url, response code, timestamp, etc.) are also automatically logged (using [morgan](https://github.com/expressjs/morgan)).
-
-## Inspirations
-
--   [hagopj13/node-express-boilerplate](https://github.com/hagopj13/node-express-boilerplate)
-
-## License
-
-To be updated
-
-## TODOs
-
--   [x] Update authentication flow to use refreshToken
--   [x] Rewrite README using this sample [template](https://github.com/talyssonoc/node-api-boilerplate)
--   [x] Handle postgres with [Squelize](https://www.npmjs.com/package/sequelize)
--   [x] Update CHANGELOG
--   [ ] Add test
--   [ ] Refactor code use Typescript
