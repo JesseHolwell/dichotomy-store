@@ -1,9 +1,9 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import Buy from "./components/Buy";
-import Home from "./components/Home";
-import Footer from "./components/ui/Footer/Footer";
-import theme from "./theme";
+import Buy from "pages/Buy";
+import Home from "pages/Home";
+import Footer from "components/ui/Footer/Footer";
+import theme from "theme";
 
 function App() {
   return (

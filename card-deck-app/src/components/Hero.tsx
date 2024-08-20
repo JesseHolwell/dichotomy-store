@@ -14,7 +14,7 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import CardRear from "../assets/sample-card-rear.jpg";
+import CardRear from "assets/sample-card-rear.jpg";
 
 export default function CallToActionWithVideo() {
   return (

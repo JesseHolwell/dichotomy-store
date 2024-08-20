@@ -1,9 +1,9 @@
 import { Box } from "@chakra-ui/react";
-import { isFeatureEnabled } from "../util/featureToggle";
-import Hero from "../components/Hero";
+import { isFeatureEnabled } from "util/featureToggle";
+import Hero from "components/Hero";
 import "./Home.css";
-import MailingList from "../components/MailingList";
-import ProductDetails from "../components/ProductDetails";
+import MailingList from "components/MailingList";
+import ProductDetails from "components/ProductDetails";
 
 function Home() {
   return (

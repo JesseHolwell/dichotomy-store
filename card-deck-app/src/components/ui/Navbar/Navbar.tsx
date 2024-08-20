@@ -12,8 +12,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import logo from "../assets/icon.png";
-import { isFeatureEnabled } from "../../../util/featureToggle";
+import logo from "assets/icon.png";
+import { isFeatureEnabled } from "util/featureToggle";
 
 interface Props {
   children: React.ReactNode;

@@ -16,8 +16,8 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { MdLocalShipping } from "react-icons/md";
-import { isFeatureEnabled } from "../util/featureToggle";
-import InteractiveDeck from "./ui/InteractiveDeck/InteractiveDeck";
+import { isFeatureEnabled } from "util/featureToggle";
+import InteractiveDeck from "components/ui/InteractiveDeck/InteractiveDeck";
 
 export default function Simple() {
   let buttonBg = useColorModeValue("gray.900", "gray.50");

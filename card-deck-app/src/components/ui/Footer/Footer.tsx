@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { SocialIcon } from "react-social-icons";
 import "react-social-icons/instagram";
-import logo from "../assets/icon-transparent.png";
+import logo from "assets/icon-transparent.png";
 
 export default function LargeWithLogoCentered() {
   return (
