@@ -32,6 +32,7 @@ export default function LargeWithLogoCentered() {
             <HStack spacing={8} alignItems={"center"} h={"100%"} gap={"0"}>
               <SocialIcon
                 // url=""
+                as="div"
                 network="instagram"
                 bgColor="transparent"
               />
