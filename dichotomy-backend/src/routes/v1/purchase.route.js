@@ -1,60 +1,61 @@
 const express = require('express');
 const validate = require('../../middlewares/validate');
-const { roleValidation } = require('../../validations');
-const { roleController } = require('../../controllers');
-
-const { grantAccess } = require('../../middlewares/validateAccessControl');
-const { resources } = require('../../config/roles');
+const purchaseValidation = require('../../validations/purchase.validation');
+const purchaseController = require('../../controllers/purchase.controller');
+// const { grantAccess } = require('../../middlewares/validateAccessControl');
+// const { resources } = require('../../config/roles');
 
 const router = express.Router();
 
 router
-	.route('/')
-	.get(
-		grantAccess('readAny', resources.ROLE),
-		validate(roleValidation.getRoles),
-		roleController.getRoles
-	)
+	.route('/create-payment-intent')
 	.post(
-		grantAccess('createAny', resources.ROLE),
-		validate(roleValidation.createRole),
-		roleController.createRole
+		validate(purchaseValidation.createPurchase),
+		purchaseController.createPurchase
 	);
 
-router
-	.route('/:roleId')
-	.get(
-		grantAccess('readAny', resources.ROLE),
-		validate(roleValidation.getRole),
-		roleController.getRole
-	)
-	.patch(
-		grantAccess('updateAny', resources.ROLE),
-		validate(roleValidation.updateUser),
-		roleController.updateRole
-	)
-	.delete(
-		grantAccess('deleteAny', resources.ROLE),
-		validate(roleValidation.deleteRole),
-		roleController.deleteRole
-	);
+// router
+// 	.route('/')
+// 	.get(
+// 		grantAccess('readAny', resources.USERINFO),
+// 		validate(userValidation.getUsers),
+// 		userController.getUsers
+// 	);
+
+// router
+// 	.route('/:userId')
+// 	.get(
+// 		grantAccess('readAny', resources.USERINFO),
+// 		validate(userValidation.getUser),
+// 		userController.getUser
+// 	)
+// 	.patch(
+// 		grantAccess('updateAny', resources.USERINFO),
+// 		validate(userValidation.updateUser),
+// 		userController.updateUser
+// 	)
+// 	.delete(
+// 		grantAccess('deleteAny', resources.USERINFO),
+// 		validate(userValidation.deleteUser),
+// 		userController.deleteUser
+// 	);
 
 module.exports = router;
 
 /**
  * @swagger
  * tags:
- *   name: Roles
- *   description: Role management and retrieval
+ *   name: Users
+ *   description: User management and retrieval
  */
 
 /**
  * @swagger
- * /roles:
+ * /users:
  *    post:
- *      summary: Create a role
- *      description: Only admins can create roles.
- *      tags: [Roles]
+ *      summary: Create a user
+ *      description: Only admins can create other users.
+ *      tags: [Users]
  *      security:
  *        - bearerAuth: []
  *      requestBody:
@@ -65,34 +66,47 @@ module.exports = router;
  *              type: object
  *              required:
  *                - name
- *                - description
+ *                - email
+ *                - password
+ *                - role
  *              properties:
  *                name:
  *                  type: string
+ *                email:
+ *                  type: string
+ *                  format: email
  *                  description: must be unique
- *                description:
+ *                password:
+ *                  type: string
+ *                  format: password
+ *                  minLength: 8
+ *                  description: At least one number and one letter
+ *                role:
  *                   type: string
+ *                   enum: [user, admin]
  *              example:
- *                name: admin
- *                description: admin
+ *                name: fake name
+ *                email: fake@example.com
+ *                password: password1
+ *                role: user
  *      responses:
  *        "201":
  *          description: Created
  *          content:
  *            application/json:
  *              schema:
- *                 $ref: '#/components/schemas/Role'
+ *                 $ref: '#/components/schemas/User'
  *        "400":
- *          $ref: '#/components/responses/DuplicateRole'
+ *          $ref: '#/components/responses/DuplicateEmail'
  *        "401":
  *          $ref: '#/components/responses/Unauthorized'
  *        "403":
  *          $ref: '#/components/responses/Forbidden'
  *
  *    get:
- *      summary: Get all users' roles
- *      description: Only admins can retrieve all roles.
- *      tags: [Roles]
+ *      summary: Get all users
+ *      description: Only admins can retrieve all users.
+ *      tags: [Users]
  *      security:
  *        - bearerAuth: []
  *      parameters:
@@ -100,12 +114,17 @@ module.exports = router;
  *          name: name
  *          schema:
  *            type: string
- *          description: role name
+ *          description: User name
  *        - in: query
- *          name: description
+ *          name: email
  *          schema:
  *            type: string
- *          description: role descrition
+ *          description: User email
+ *        - in: query
+ *          name: role
+ *          schema:
+ *            type: string
+ *          description: User role
  *        - in: query
  *          name: sortBy
  *          schema:
@@ -136,13 +155,19 @@ module.exports = router;
  *                  results:
  *                    type: array
  *                    items:
- *                      $ref: '#/components/schemas/Role'
+ *                      $ref: '#/components/schemas/User'
  *                  page:
  *                    type: integer
  *                    example: 1
  *                  limit:
  *                    type: integer
  *                    example: 10
+ *                  totalPages:
+ *                    type: integer
+ *                    example: 1
+ *                  totalResults:
+ *                    type: integer
+ *                    example: 1
  *        "401":
  *          $ref: '#/components/responses/Unauthorized'
  *        "403":
@@ -151,11 +176,11 @@ module.exports = router;
 
 /**
  * @swagger
- * /roles/{id}:
+ * /users/{id}:
  *    get:
- *      summary: Get a user's role
- *      description: Only admins can fetch other roles
- *      tags: [Roles]
+ *      summary: Get a user
+ *      description: Logged in users can fetch only their own user information. Only admins can fetch other users.
+ *      tags: [Users]
  *      security:
  *        - bearerAuth: []
  *      parameters:
@@ -164,14 +189,14 @@ module.exports = router;
  *          required: true
  *          schema:
  *            type: string
- *          description: Role id
+ *          description: User id
  *      responses:
  *        "200":
  *          description: OK
  *          content:
  *            application/json:
  *              schema:
- *                 $ref: '#/components/schemas/Role'
+ *                 $ref: '#/components/schemas/User'
  *        "401":
  *          $ref: '#/components/responses/Unauthorized'
  *        "403":
@@ -180,9 +205,9 @@ module.exports = router;
  *          $ref: '#/components/responses/NotFound'
  *
  *    patch:
- *      summary: Update a user's role
- *      description: Only admins can update other users' roles.
- *      tags: [Roles]
+ *      summary: Update a user
+ *      description: Logged in users can only update their own information. Only admins can update other users.
+ *      tags: [Users]
  *      security:
  *        - bearerAuth: []
  *      parameters:
@@ -191,7 +216,7 @@ module.exports = router;
  *          required: true
  *          schema:
  *            type: string
- *          description: Role id
+ *          description: User id
  *      requestBody:
  *        required: true
  *        content:
@@ -201,18 +226,28 @@ module.exports = router;
  *              properties:
  *                name:
  *                  type: string
- *                description:
+ *                email:
  *                  type: string
- *                  description: can be empty
+ *                  format: email
+ *                  description: must be unique
+ *                password:
+ *                  type: string
+ *                  format: password
+ *                  minLength: 8
+ *                  description: At least one number and one letter
+ *              example:
+ *                name: fake name
+ *                email: fake@example.com
+ *                password: password1
  *      responses:
  *        "200":
  *          description: OK
  *          content:
  *            application/json:
  *              schema:
- *                 $ref: '#/components/schemas/Role'
+ *                 $ref: '#/components/schemas/User'
  *        "400":
- *          $ref: '#/components/responses/DuplicateRole'
+ *          $ref: '#/components/responses/DuplicateEmail'
  *        "401":
  *          $ref: '#/components/responses/Unauthorized'
  *        "403":
@@ -221,9 +256,9 @@ module.exports = router;
  *          $ref: '#/components/responses/NotFound'
  *
  *    delete:
- *      summary: Delete a user's role
- *      description: Only admins can delete roles.
- *      tags: [Roles]
+ *      summary: Delete a user
+ *      description: Logged in users can delete only themselves. Only admins can delete other users.
+ *      tags: [Users]
  *      security:
  *        - bearerAuth: []
  *      parameters:
@@ -232,7 +267,7 @@ module.exports = router;
  *          required: true
  *          schema:
  *            type: string
- *          description: Role id
+ *          description: User id
  *      responses:
  *        "200":
  *          description: No content

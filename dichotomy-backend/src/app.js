@@ -8,7 +8,7 @@ const httpStatus = require('http-status');
 const { postgres } = require('./config/postgres');
 const config = require('./config/config');
 const morgan = require('./config/morgan');
-const jwt = require('./config/jwt');
+// const jwt = require('./config/jwt');
 const { authLimiter } = require('./middlewares/rateLimiter');
 const routes = require('./routes/v1');
 const { errorConverter, errorHandler } = require('./middlewares/error');
@@ -43,7 +43,7 @@ app.options('*', cors());
 app.use(cookieParser());
 
 // jwt authentication
-app.use(jwt());
+// app.use(jwt());
 
 // connect to postgres database
 app.use((req, _, next) => {
