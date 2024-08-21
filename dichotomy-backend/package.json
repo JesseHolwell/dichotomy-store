@@ -10,8 +10,7 @@
     "lint:fix": "eslint . --fix",
     "prettier": "prettier --check **/*.js",
     "prettier:fix": "prettier --write **/*.js",
-    "dev": "cross-env NODE_ENV=development nodemon src/index.js",
-    "build": "echo 'No build step required'"
+    "dev": "cross-env NODE_ENV=development nodemon src/index.js"
   },
   "repository": {
     "type": "git",

@@ -20,7 +20,7 @@ deploy frontend:
 Amplify CI/CD
 
 deploy backend:
-Netlify CI/CD
+Vercel CI/CD
 
 deploy database:
 AWS RDS

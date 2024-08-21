@@ -4,6 +4,14 @@ The backend for the dichotomy card game store using REST APIs in Node.js using E
 
 ## Getting Started
 
+### Production:
+
+dichotomy-backend.vercel.app
+
+### Staging:
+
+dichotomy-backend-staging.vercel.app
+
 ### Installation
 
 1. `npm i`
