@@ -4,7 +4,8 @@
 
 ### production:
 
-dichotomystore.com
+https://dichotomycards.com
+https://main.d16pdb1z0qmx8z.amplifyapp.com/
 
 ### staging:
 
@@ -15,8 +16,14 @@ https://staging.d16pdb1z0qmx8z.amplifyapp.com/
 run:
 `npm start`
 
-deploy:
+deploy frontend:
 Amplify CI/CD
+
+deploy backend:
+Netlify CI/CD
+
+deploy database:
+AWS RDS
 
 ### packages:
 
@@ -46,16 +53,6 @@ https://stripe.com/
 
 Credential manager - Bitwarden
 https://vault.bitwarden.com/
-
-Production site:
-https://dichotomycards.com
-https://main.d16pdb1z0qmx8z.amplifyapp.com/
-
-Staging site:
-https://staging.d16pdb1z0qmx8z.amplifyapp.com/
-
-Temporary project site:
-https://jesseholwell.github.io/dichotomy
 
 QR code:
 https://app.qr-code-generator.com/manage/?aftercreate=1&count=1
