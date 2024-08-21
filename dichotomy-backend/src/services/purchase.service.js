@@ -1,56 +1,44 @@
-// const httpStatus = require('http-status');
-// const { getOffset } = require('../utils/query');
-// const ApiError = require('../utils/ApiError');
-// const { encryptData } = require('../utils/auth');
-// const config = require('../config/config.js');
-const stripe = require('stripe')('sk_test_...');
-// const stripe = new Stripe('sk_test_...');
 const db = require('../db/models');
+const logger = require('../config/logger');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 async function createPaymentIntent(req) {
-	try {
-		const { amount, currency } = req.body;
+	logger.debug('the service was hit');
 
-		stripe.customers
-			.create({
-				email: 'customer@example.com',
-			})
-			.then((customer) => console.log(customer.id))
-			.catch((error) => console.error(error));
+	const { amount, currency } = req.body;
 
-		const paymentIntent = await stripe.paymentIntents.create({
-			amount,
-			currency,
-		});
-		// res.send({ clientSecret: paymentIntent.client_secret });
-		console.log('PAYMENT PROCESSED SUCCESSFULLY');
+	// TODO: create a customer in stripe?
+	// TODO: add a line in the db on intent?
 
-		return paymentIntent;
-	} catch (error) {
-		// res.status(500).send({ error: error.message });
-		console.log('PAYMENT PROCESSED FAILED');
-	}
+	const paymentIntent = await stripe.paymentIntents.create({
+		amount,
+		currency,
+	});
+
+	logger.debug('PAYMENT PROCESSED SUCCESSFULLY');
+	return {
+		clientSecret: paymentIntent.client_secret,
+	};
 }
 
-async function createPurchase() {
-	// const { email, name } = req.body;
+async function savePurchase(req) {
+	logger.debug('the service was hit');
 
-	const paymentIntent = await createPaymentIntent();
+	const { paymentIntentId, amount, name, email, shippingAddress } = req.body;
 
-	const createdPurchase = await db.purchase
-		.create({
-			name: 'name',
-			email: 'email',
-			stripe_transaction_id: paymentIntent.stripe_transaction_id,
-			shipping_address: 'shipping address',
-		})
-		.then((resultEntity) => resultEntity.get({ plain: true }));
+	await db.purchase.create({
+		stripe_transaction_id: paymentIntentId,
+		amount,
+		name,
+		email,
+		shipping_address: shippingAddress,
+	});
 
-	console.log('PURCHASE CREATED SUCCESSFULLY');
-
-	return createdPurchase;
+	logger.debug('PURCHASE CREATED SUCCESSFULLY');
+	return { success: true };
 }
 
 module.exports = {
-	createPurchase,
+	createPaymentIntent,
+	savePurchase,
 };

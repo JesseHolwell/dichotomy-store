@@ -7,12 +7,15 @@ const purchaseController = require('../../controllers/purchase.controller');
 
 const router = express.Router();
 
-router
-	.route('/create-payment-intent')
-	.post(
-		validate(purchaseValidation.createPurchase),
-		purchaseController.createPurchase
-	);
+router.route('/createPaymentIntent').post(
+	// validate(purchaseValidation.createPurchase),
+	purchaseController.createPaymentIntent
+);
+
+router.route('/savePurchase').post(
+	// validate(purchaseValidation.createPurchase),
+	purchaseController.savePurchase
+);
 
 // router
 // 	.route('/')
