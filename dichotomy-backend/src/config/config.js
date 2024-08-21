@@ -51,6 +51,7 @@ const envVarsSchema = Joi.object()
 		EMAIL_FROM: Joi.string().description(
 			'the from field in the emails sent by the app'
 		),
+		STRIPE_SECRET_KEY: Joi.string().required(),
 	})
 	.unknown();
 
@@ -91,15 +92,7 @@ module.exports = {
 			idle: envVars.SQL_IDLE,
 		},
 		define: {
-			/**
-			 * All tables won't have "createdAt" and "updatedAt" Auto fields.
-			 * References: https://sequelize.org/master/manual/model-basics.html#timestamps
-			 */
-			timestamps: false,
-			// Table names won't be pluralized.
 			freezeTableName: true,
-			// Column names will be underscored.
-			underscored: true,
 		},
 	},
 	email: {
@@ -112,5 +105,9 @@ module.exports = {
 			},
 		},
 		from: envVars.EMAIL_FROM,
+	},
+	stripe: {
+		// publicKey: envVars.STRIPE_PUBLIC_KEY,
+		secretKey: envVars.STRIPE_SECRET_KEY,
 	},
 };

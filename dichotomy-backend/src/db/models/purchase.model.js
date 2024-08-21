@@ -1,5 +1,4 @@
 module.exports = (sequelize, DataTypes) => {
-	const ShippingStatus = DataTypes.ENUM('pending', 'shipped', 'delivered');
 	const purchase = sequelize.define(
 		'purchase',
 		{
@@ -18,43 +17,29 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: false,
 				unique: true,
 			},
-			stripe_transaction_id: {
+			stripeTransactionId: {
 				type: DataTypes.STRING(255),
 				allowNull: false,
 				unique: true,
 			},
-			shipping_address: {
+			shippingAddress: {
 				type: DataTypes.TEXT,
 				allowNull: false,
 			},
-			purchase_date: {
+			purchaseDate: {
 				type: DataTypes.DATE,
 				defaultValue: DataTypes.NOW,
 			},
-			shipping_status: {
-				type: ShippingStatus,
+			shippingStatus: {
+				type: DataTypes.ENUM('pending', 'shipped', 'delivered'),
 				defaultValue: 'pending',
 			},
-			shipping_date: {
+			shippingDate: {
 				type: DataTypes.DATE,
 				allowNull: true,
 			},
-			created_date_time: {
-				type: DataTypes.DATE,
-				defaultValue: DataTypes.NOW,
-				allowNull: false,
-			},
-			modified_date_time: {
-				type: DataTypes.DATE,
-				defaultValue: DataTypes.NOW,
-				allowNull: false,
-			},
 		},
 		{
-			/**
-			 * By default, sequelize will automatically transform all passed model names into plural
-			 * References: https://sequelize.org/master/manual/model-basics.html#table-name-inference
-			 */
 			tableName: 'purchase',
 		}
 	);

@@ -1,6 +1,8 @@
+const config = require('../config/config');
+// eslint-disable-next-line import/order
+const stripe = require('stripe')(config.stripe.secretKey);
 const db = require('../db/models');
 const logger = require('../config/logger');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 async function createPaymentIntent(req) {
 	logger.debug('the service was hit');
@@ -24,14 +26,16 @@ async function createPaymentIntent(req) {
 async function savePurchase(req) {
 	logger.debug('the service was hit');
 
-	const { paymentIntentId, amount, name, email, shippingAddress } = req.body;
+	const { stripeTransactionId, amount, name, email, phone, shippingAddress } =
+		req.body;
 
 	await db.purchase.create({
-		stripe_transaction_id: paymentIntentId,
+		stripeTransactionId,
 		amount,
 		name,
 		email,
-		shipping_address: shippingAddress,
+		phone,
+		shippingAddress,
 	});
 
 	logger.debug('PURCHASE CREATED SUCCESSFULLY');

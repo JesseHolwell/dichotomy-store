@@ -7,6 +7,15 @@ const logger = require('./config/logger');
 // sync database
 models.sequelize.sync();
 
+// models.sequelize
+// 	.sync({ alter: true })
+// 	.then(() => {
+// 		logger.debug('Database & tables created!');
+// 	})
+// 	.catch((err) => {
+// 		logger.error('Error creating tables:', err);
+// 	});
+
 const server = http.Server(app);
 
 const port = config.port || 3000;
