@@ -13,60 +13,78 @@ const stripePromise = loadStripe(
   process.env.REACT_APP_STRIPE_PUBLIC_KEY as string
 );
 
+function setLoading(value: boolean) {
+  console.log("set loading", value);
+}
+
+function setErrorMessage(value: string) {
+  console.log("set error", value);
+}
+
+function setSuccess(value: boolean) {
+  console.log("set success", value);
+}
+
 function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
 
   const handleClick = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoading(true);
 
     if (!stripe || !elements) {
-      // Disable form submission until Stripe.js has loaded
+      setLoading(false);
       return;
     }
 
-    try {
-      const apiUrl = process.env.REACT_APP_API_URL;
-      const response = await axios.post(
-        `${apiUrl}/v1/purchase/createPaymentIntent`,
-        {
-          // TODO: real values
-          amount: 999,
-          currency: "AUD",
-        }
-      );
+    // Call your backend to create a Payment Intent
+    // try {
+    const response = await fetch("/api/checkout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ amount: 1000, currency: "usd" }),
+    });
 
-      const { clientSecret } = response.data;
+    const { clientSecret, error } = await response.json();
 
-      if (!clientSecret) {
-        throw new Error("Client secret is missing from the response.");
+    if (error) {
+      setErrorMessage(error);
+      setLoading(false);
+      return;
+    }
+
+    // Confirm the payment on the client-side
+    const result = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: elements.getElement(CardElement)!,
+      },
+    });
+
+    if (result.error) {
+      setErrorMessage(result.error.message || "Payment failed");
+      setLoading(false);
+    } else {
+      if (result.paymentIntent?.status === "succeeded") {
+        // Payment was successful, update the database
+        await fetch("/api/update-order", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            paymentIntentId: result.paymentIntent.id,
+            name: "Customer Name", // Replace with actual customer name
+            email: "customer@example.com", // Replace with actual customer email
+            shippingAddress: "123 Example St, City, Country", // Replace with actual shipping address
+          }),
+        });
+
+        setSuccess(true);
       }
-
-      const result = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: elements.getElement(CardElement)!,
-        },
-      });
-
-      if (result.error) {
-        console.error("Payment failed", result.error);
-      } else if (result.paymentIntent?.status === "succeeded") {
-        console.log("Payment succeeded");
-
-        const response = await axios.post(
-          `${apiUrl}/v1/purchase/savePurchase`,
-          {
-            stripeTransactionId: result.paymentIntent.id,
-            amount: result.paymentIntent.amount,
-            name: "Web Test",
-            email: "web@test.com",
-            phone: "0404404404",
-            shippingAddress: "the world wide web",
-          }
-        );
-      }
-    } catch (error) {
-      console.error("Error:", error);
+      setLoading(false);
     }
   };
 
