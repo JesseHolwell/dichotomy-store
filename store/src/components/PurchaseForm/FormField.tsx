@@ -1,5 +1,6 @@
-import { forwardRef } from "react";
-import { Box, Input, Text, Flex } from "@chakra-ui/react";
+import { forwardRef, Ref } from "react";
+import { Box, Input, Text, Flex, Select } from "@chakra-ui/react";
+import { COUNTRIES } from "constants/countries";
 
 type FormFieldProps = {
   label: string;
@@ -10,7 +11,9 @@ type FormFieldProps = {
   [prop: string]: unknown;
 };
 
-const FormField = forwardRef<HTMLInputElement, FormFieldProps>((props, ref) => {
+type FormFieldRef = HTMLInputElement | HTMLSelectElement;
+
+const FormField = forwardRef<FormFieldRef, FormFieldProps>((props, ref) => {
   const { label, placeholder, type = "text", gridArea, ...other } = props;
 
   let errorMessage;
@@ -38,15 +41,32 @@ const FormField = forwardRef<HTMLInputElement, FormFieldProps>((props, ref) => {
           </Text>
         )}
       </Flex>
-      <Input
-        ref={ref}
-        {...other}
-        type={type}
-        placeholder={placeholder}
-        border="1px solid"
-        borderColor={props["errors"] ? "inputError" : "inputBorder"}
-        id={label}
-      />
+      {type != "country" ? (
+        <Input
+          ref={ref as Ref<HTMLInputElement>}
+          {...other}
+          type={type}
+          placeholder={placeholder}
+          border="1px solid"
+          borderColor={props["errors"] ? "inputError" : "inputBorder"}
+          id={label}
+        />
+      ) : (
+        <Select
+          ref={ref as Ref<HTMLSelectElement>} // Type assertion here
+          {...other}
+          placeholder={placeholder}
+          border="1px solid"
+          borderColor={props["errors"] ? "inputError" : "inputBorder"}
+          id={label}
+        >
+          {COUNTRIES.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.title}
+            </option>
+          ))}
+        </Select>
+      )}
     </Box>
   );
 });

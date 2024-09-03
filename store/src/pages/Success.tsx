@@ -9,14 +9,12 @@ const stripePromise = loadStripe(
   process.env.REACT_APP_STRIPE_PUBLIC_KEY as string
 );
 
-function Buy() {
+function Success() {
   return (
     <Container maxW="full" mt={4} centerContent>
-      <Elements stripe={stripePromise}>
-        <PurchaseForm />
-      </Elements>
+      <h1>Purchase successful</h1>
     </Container>
   );
 }
 
-export default Buy;
+export default Success;

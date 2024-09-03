@@ -2,156 +2,167 @@ import {
   Box,
   Heading,
   SimpleGrid,
-  Text,
-  useRadioGroup,
-  Image,
-  HStack,
   Stack,
   useColorModeValue,
   Button,
+  useTheme,
+  Select,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-
+import { loadStripe } from "@stripe/stripe-js";
+import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
+import StyledCardElement from "./StyledCardElement";
 import FormLegend from "components/PurchaseForm/FormLegend";
 import FormField from "components/PurchaseForm/FormField";
-// import Radio from "components/ui/Radio";
-// import Summary from "components/ui/Summary";
 import { useModal } from "components/PurchaseForm/ModalContextProvider";
-// store/src/components/PurchaseForm/theme.ts
-import { loadStripe } from "@stripe/stripe-js";
-import {
-  Elements,
-  CardElement,
-  useStripe,
-  useElements,
-} from "@stripe/react-stripe-js";
-import StyledCardElement from "./StyledCardElement";
+import { useNavigate } from "react-router-dom";
+import { cost, currency } from "constants/price";
 
-// import theme from "theme";
-
-const stripePromise = loadStripe(
-  process.env.REACT_APP_STRIPE_PUBLIC_KEY as string
-);
-
-function setLoading(value: boolean) {
-  console.log("set loading", value);
-}
-
-function setErrorMessage(value: string) {
-  console.log("set error", value);
-}
-
-function setSuccess(value: boolean) {
-  console.log("set success", value);
-}
+// const stripePromise = loadStripe(
+//   process.env.REACT_APP_STRIPE_PUBLIC_KEY as string
+// );
 
 type Inputs = {
   name: string;
   emailAddress: string;
   phoneNumber: string;
   address: string;
-  ZIPCode: string;
+  postcode: string;
   city: string;
   country: string;
-  eMoneyNumber: number;
-  eMoneyPin: number;
 };
 
 const CheckoutForm = (): JSX.Element => {
+  let navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>({ mode: "onBlur" });
-  const { onCheckoutModalOpen } = useModal();
-  const options = ["e-Money", "Cash on Delivery"];
-  // const [checkedOption, setCheckedOption] = useState(options[0]);
-  const [isDisabled, setIsDisabled] = useState(false);
+  // const { onCheckoutModalOpen } = useModal();
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [cardComplete, setCardComplete] = useState(false);
 
-  // const handleChange = (value: string) => {
-  //   setCheckedOption(value);
-  // };
+  const theme = useTheme();
 
-  // const { getRootProps, getRadioProps } = useRadioGroup({
-  //   name: "Payment Details",
-  //   defaultValue: "e-Money",
-  //   onChange: handleChange,
-  // });
+  const DEFAULT_COUNTRY = "AU";
+  const [country, setCountry] = useState(DEFAULT_COUNTRY);
 
-  // const group = getRootProps();
+  const cardElementStyles = {
+    // base: {
+    //   color: theme.colors.gray[900], // Use a color from your Chakra theme
+    //   fontFamily: theme.fonts.body, // Use the default body font
+    //   fontSize: theme.fontSizes.md, // Use a medium font size from your theme
+    //   "::placeholder": {
+    //     color: theme.colors.gray[500], // Style the placeholder color
+    //   },
+    // },
+    // invalid: {
+    //   color: theme.colors.red[500], // Style the color when the input is invalid
+    // },
 
-  const mySubmit = (e: React.FormEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    if (isDisabled) return;
-    handleSubmit(async () => {
-      setLoading(true);
+    base: {
+      iconColor: "#fff",
+      color: "#fff",
+      fontWeight: "500",
+      fontFamily: "Roboto, Open Sans, Segoe UI, sans-serif",
+      fontSize: "16px",
+      fontSmoothing: "antialiased",
+      ":-webkit-autofill": {
+        color: "#fce883",
+      },
+      "::placeholder": {
+        color: "#fff",
+      },
+    },
+    invalid: {
+      iconColor: "#FFC7EE",
+      color: "#FFC7EE",
+    },
+  };
 
-      if (!stripe || !elements) {
-        setLoading(false);
-        return;
-      }
+  const handleFormSubmit = async (data: Inputs) => {
+    if (!stripe || !elements) {
+      setErrorMessage("Stripe or Elements not loaded.");
+      return;
+    }
 
-      // Call your backend to create a Payment Intent
-      // try {
+    if (!cardComplete) {
+      setErrorMessage("Please enter valid card details.");
+      return;
+    }
+
+    setErrorMessage("");
+    setIsLoading(true);
+
+    try {
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ amount: 1000, currency: "usd" }),
+        body: JSON.stringify({ amount: cost, currency: currency }),
       });
 
       const { clientSecret, error } = await response.json();
 
       if (error) {
-        setErrorMessage(error);
-        setLoading(false);
-        return;
+        throw new Error(error);
       }
 
-      // Confirm the payment on the client-side
       const result = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
           card: elements.getElement(CardElement)!,
+          billing_details: {
+            name: data.name,
+            email: data.emailAddress,
+            address: {
+              line1: data.address,
+              postal_code: data.postcode,
+              city: data.city,
+              country: data.country,
+            },
+          },
         },
       });
 
       if (result.error) {
-        setErrorMessage(result.error.message || "Payment failed");
-        setLoading(false);
-      } else {
-        if (result.paymentIntent?.status === "succeeded") {
-          // Payment was successful, update the database
-          await fetch("/api/update-order", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              paymentIntentId: result.paymentIntent.id,
-              name: "Customer Name", // Replace with actual customer name
-              email: "customer@example.com", // Replace with actual customer email
-              shippingAddress: "123 Example St, City, Country", // Replace with actual shipping address
-            }),
-          });
+        throw new Error(result.error.message || "Payment failed");
+      } else if (result.paymentIntent?.status === "succeeded") {
+        await fetch("/api/update-order", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            paymentIntentId: result.paymentIntent.id,
+            name: data.name,
+            email: data.emailAddress,
+            shippingAddress: `${data.address}, ${data.city}, ${data.country}`,
+          }),
+        });
 
-          setSuccess(true);
-          //TODO: send an email invoice to the customer
-        }
-        setLoading(false);
+        setIsSuccess(true);
+        navigate("/success");
+        // TODO: send an email invoice to the customer
       }
-    })(e);
+    } catch (error: any) {
+      setErrorMessage(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <Stack
       as="form"
       noValidate
-      onSubmit={mySubmit}
+      onSubmit={handleSubmit(handleFormSubmit)}
       direction={{ base: "column", lg: "row" }}
       alignItems={{ lg: "start" }}
       spacing={{ base: "2rem" }}
@@ -169,6 +180,10 @@ const CheckoutForm = (): JSX.Element => {
         <Heading as="h1" fontSize={{ base: "1.75rem" }} mb={{ base: "2rem" }}>
           Checkout
         </Heading>
+        <Heading as="h1" fontSize={{ base: "1.5rem" }} mb={{ base: "1.5rem" }}>
+          ${cost} {currency}
+        </Heading>
+
         <Box as="fieldset" mb="2rem">
           <FormLegend>Billing Details</FormLegend>
           <SimpleGrid
@@ -231,18 +246,14 @@ const CheckoutForm = (): JSX.Element => {
               placeholder="1137 Williams Avenue"
             />
             <FormField
-              {...register("ZIPCode", {
+              {...register("postcode", {
                 required: "Field cannot be empty",
-                pattern: {
-                  value: /^[0-9]{5}(?:-[0-9]{4})?$/,
-                  message: "Wrong format",
-                },
               })}
-              aria-invalid={errors.ZIPCode ? "true" : "false"}
-              errors={errors.ZIPCode}
-              label="ZIP Code"
-              type="email"
-              placeholder="10001"
+              aria-invalid={errors.postcode ? "true" : "false"}
+              errors={errors.postcode}
+              label="Zip/Postcode"
+              // type="email"
+              placeholder="1111"
               gridArea={{ sm: "b" }}
             />
             <FormField
@@ -262,97 +273,69 @@ const CheckoutForm = (): JSX.Element => {
               aria-invalid={errors.country ? "true" : "false"}
               errors={errors.country}
               label="Country"
-              placeholder="United States"
+              type="country"
+              // placeholder="Australia"
               gridArea={{ sm: "d" }}
             />
+            {/* <CountrySelector
+              id={"countries"}
+              open={isOpen}
+              onToggle={() => setIsOpen(!isOpen)}
+              onChange={(val) => setCountry(val)}
+              // We use this type assertion because we are always sure this find will return a value but need to let TS know since it could technically return null
+              selectedValue={
+                COUNTRIES.find(
+                  (option) => option.value === country
+                ) as SelectMenuOption
+              }
+            /> */}
+            {/* 
+            <Select placeholder="Select option">
+              <option value="option1">Option 1</option>
+              <option value="option2">Option 2</option>
+              <option value="option3">Option 3</option>
+            </Select> */}
+
+            {/* <ReactCountryDropdown
+              defaultCountry="JP"
+              onSelect={(country) => console.log(country.name)}
+            /> */}
+
+            {/* <CountryPicker
+              selectedCountry={country}
+              setSelectedCountry={setCountry}
+              flagsInMenu={true}
+              placeholder={"Choose a country"}
+            /> */}
           </SimpleGrid>
         </Box>
         <Box as="fieldset">
           <FormLegend>Payment Details</FormLegend>
-          {/* <SimpleGrid
-            gridTemplateColumns={{ base: "1fr", sm: "1fr 1fr" }}
-            gridGap={{ sm: "1rem" }}
-          > */}
-          {/* <Text color="black" fontWeight="bold" fontSize="0.75rem" mb={2}>
-              Payment Method
-            </Text> */}
-
-          <StyledCardElement />
-          {/* <Box {...group}>
-              {options.map((value) => {
-                const radio = getRadioProps({ value });
-                return (
-                  <Radio key={value} {...radio}>
-                    {value}
-                  </Radio>
-                );
-              })}
-            </Box> */}
-          {/* </SimpleGrid> */}
-          {/* {checkedOption === options[0] ? (
-            <SimpleGrid
-              gridTemplateColumns={{ base: "1fr", sm: "1fr 1fr" }}
-              gridGap={{ base: "1rem" }}
-              mt={{ base: "1rem" }}
-            >
-              <FormField
-                {...register("eMoneyNumber", {
-                  required: "Field cannot be empty",
-                  pattern: {
-                    value: /^[0-9]{9}$/,
-                    message: "Wrong format",
-                  },
-                })}
-                aria-invalid={errors.eMoneyNumber ? "true" : "false"}
-                errors={errors.eMoneyNumber}
-                label="e-Money Number"
-                placeholder="238521993"
-                type="number"
-              />
-              <FormField
-                {...register("eMoneyPin", {
-                  required: "Field cannot be empty",
-                  pattern: {
-                    value: /^[0-9]{4}$/,
-                    message: "Wrong format",
-                  },
-                })}
-                aria-invalid={errors.eMoneyPin ? "true" : "false"}
-                errors={errors.eMoneyPin}
-                label="e-Money PIN"
-                placeholder="6891"
-                type="number"
-              />
-            </SimpleGrid>
-          ) : (
-            <HStack align="center" spacing="2rem" mt="1.5rem">
-              <Image src="/images/checkout/icon-cash-on-delivery.svg" />
-              <Text>
-                The ‘Cash on Delivery’ option enables you to pay in cash when
-                our delivery courier arrives at your residence. Just make sure
-                your address is correct so that your order will not be
-                cancelled.
-              </Text>
-            </HStack>
-          )} */}
+          <CardElement
+            options={{
+              style: cardElementStyles,
+              disableLink: true,
+              hidePostalCode: true,
+            }}
+            onChange={(event) => setCardComplete(event.complete)}
+          />
         </Box>
         <Button
           rounded={"full"}
           size={"lg"}
           fontWeight={"normal"}
           my={8}
-          // px={6}
-          // mx={32}
-          // my={32}
           colorScheme={"orange"}
           bg={"orange.400"}
           _hover={{ bg: "orange.500" }}
           type="submit"
+          isLoading={isLoading}
+          isDisabled={isLoading || isSuccess}
         >
           Buy the Dichotomy card game
         </Button>
+        {errorMessage && <Box color="red.500">{errorMessage}</Box>}
       </Box>
-      {/* <Summary isDisabled={isDisabled} setIsDisabled={setIsDisabled} /> */}
     </Stack>
   );
 };
