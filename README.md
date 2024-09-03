@@ -25,7 +25,7 @@ Vercel CI/CD
 deploy database:
 AWS RDS
 
-### packages:
+### services:
 
 DNS - Cloudfare
 https://www.cloudflare.com/en-au/

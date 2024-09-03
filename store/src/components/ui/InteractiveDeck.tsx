@@ -3,7 +3,7 @@
 import { Box, HStack, Image, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import CardFront from "assets/sample-card-front-blank.jpg";
-import AnnotationArrow from "components/ui/AnnotationArrow/AnnotationArrow";
+import AnnotationArrow from "components/ui/AnnotationArrow";
 import "./InteractiveDeck.css";
 
 interface WordPair {
