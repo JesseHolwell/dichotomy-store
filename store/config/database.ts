@@ -1,3 +1,4 @@
+import pg from "pg";
 import { Dialect, Sequelize } from "sequelize";
 
 const database = process.env.DB_NAME as string;
@@ -9,13 +10,14 @@ const dialect = "postgres" as Dialect;
 const sequelize = new Sequelize(database, username, password, {
   host,
   dialect,
+  dialectModule: pg,
   dialectOptions: {
     ssl: {
       require: true,
       rejectUnauthorized: false, // Depending on your setup, you might need this
     },
   },
-  logging: true,
+  logging: console.log,
 });
 
 export default sequelize;

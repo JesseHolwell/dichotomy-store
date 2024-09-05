@@ -61,6 +61,7 @@
     ]
   },
   "devDependencies": {
+    "@types/pg": "^8.11.8",
     "@types/sequelize": "^4.28.20"
   }
 }
